@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
 //            android.R.layout.simple_list_item_1,
 //            DataProvinsi
 //        )
-//        _lvData.adapter = lvAdapter
 
         lvAdapter = SimpleAdapter(
             this,
@@ -58,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                 android.R.id.text2
             )
         )
+        _lvData.adapter = lvAdapter
 
         fun TambahData(db:FirebaseFirestore, Provinsi: String, Ibukota : String) {
             val dataBaru = daftarProvinsi(Provinsi, Ibukota)
@@ -76,17 +76,15 @@ class MainActivity : AppCompatActivity() {
         fun readData(db:FirebaseFirestore){
             db.collection("tbProvinsi").get()
                 .addOnSuccessListener {
-//                        result->
-//                    DataProvinsi.clear()
-//                    for(document in result) {
-//                        val readData = daftarProvinsi(
-//                            document.data.get("provinsi").toString(),
-//                            document.data.get("ibukota").toString()
-//                        )
-//                        DataProvinsi.add(readData)
-//                    }
-//                    lvAdapter.notifyDataSetChanged()
-//                }
+                        result->
+                    DataProvinsi.clear()
+                    for(document in result) {
+                        val readData = daftarProvinsi(
+                            document.data.get("provinsi").toString(),
+                            document.data.get("ibukota").toString()
+                        )
+                        DataProvinsi.add(readData)
+                    }
                     data.clear()
                     DataProvinsi.forEach{
                         val dt : MutableMap<String, String> = HashMap(2)
@@ -94,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                         dt["Ibu"] = it.ibukota
                         data.add(dt)
                     }
+                    lvAdapter.notifyDataSetChanged()
                 }
                 .addOnFailureListener{
                     Log.d("Firebase", it.message.toString())
