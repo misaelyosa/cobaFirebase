@@ -61,9 +61,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         _btSimpan.setOnClickListener{
-            var inputProvinsi = _etProvinsi.toString()
-            var inputIbukota = _etIbukota.toString()
-            TambahData(db, inputProvinsi, inputIbukota)
+            val inputProvinsi = _etProvinsi.text.toString().trim()
+            val inputIbukota = _etIbukota.text.toString().trim()
+
+            if (inputProvinsi.isNotEmpty() && inputIbukota.isNotEmpty()) {
+                TambahData(db, inputProvinsi, inputIbukota)
+            } else {
+                Log.d("Firebase", "Both fields must be filled.")
+            }
         }
     }
 }
