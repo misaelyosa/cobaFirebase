@@ -60,12 +60,34 @@ class MainActivity : AppCompatActivity() {
                 }
         }
 
+        fun readData(db:FirebaseFirestore){
+            db.collection("tbProvinsi").get()
+                .addOnSuccessListener {
+                        result->
+                    DataProvinsi.clear()
+                    for(document in result) {
+                        val readData = daftarProvinsi(
+                            document.data.get("provinsi").toString(),
+                            document.data.get("ibukota").toString()
+                        )
+                        DataProvinsi.add(readData)
+                    }
+                    lvAdapter.notifyDataSetChanged()
+                }
+                .addOnFailureListener{
+                    Log.d("Firebase", it.message.toString())
+                }
+        }
+
+        readData(db)
+
         _btSimpan.setOnClickListener{
             val inputProvinsi = _etProvinsi.text.toString().trim()
             val inputIbukota = _etIbukota.text.toString().trim()
 
             if (inputProvinsi.isNotEmpty() && inputIbukota.isNotEmpty()) {
                 TambahData(db, inputProvinsi, inputIbukota)
+                readData(db)
             } else {
                 Log.d("Firebase", "Both fields must be filled.")
             }
